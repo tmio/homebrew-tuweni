@@ -10,7 +10,7 @@ class Tuweni < Formula
   def install
     prefix.install "lib"
     bin.install "bin/tuweni"
-    bin.install "bin/jsonrpc"
+    # bin.install "bin/jsonrpc"
     bin.install "bin/eth-faucet"
   end
 
