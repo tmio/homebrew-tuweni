@@ -1,0 +1,6 @@
+.DS_Store
+**/*.log
+/doc/
+/pkg/
+/spec/reports/
+/tmp/

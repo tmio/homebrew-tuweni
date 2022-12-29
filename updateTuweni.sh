@@ -1,26 +1,29 @@
-#!/bin/bash
-set -euo pipefail
-TEMP=`mktemp -d`
+#!/usr/bin/env bash
 
-function cleanup() {
-	rm -rf "${TEMP}"
+set -euo pipefail
+TEMP=$(mktemp -d)
+
+function cleanup() 
+{
+ rm -rf "${TEMP}"
 }
+
 trap cleanup EXIT
 
 VERSION=${1?Must specify the tuweni version to get}
 
-URL="https://downloads.apache.org/incubator/tuweni/${VERSION}-incubating/tuweni-bin-${VERSION}-incubating.zip"
+URL="https://dlcdn.apache.org/incubator/tuweni/${VERSION}-incubating/tuweni-bin-${VERSION}-incubating.zip"
 echo "Downloading version ${VERSION} of tuweni from ${URL}..."
-curl -o "${TEMP}/tuweni-${VERSION}.zip" -L --fail "${URL}"
-
-unzip -t "${TEMP}/tuweni-${VERSION}.zip"
+curl -o "${TEMP}/tuweni-${VERSION}.zip" -sL "${URL}"
 
 echo "Calculating new hash..."
-HASH=`shasum -a 256 ${TEMP}/tuweni-${VERSION}.zip | cut -d ' ' -f 1`
+HASH=$(shasum -a 256 "${TEMP}"/tuweni-"${VERSION}".zip | cut -d ' ' -f 1)
+
+unzip -t  "${TEMP}/tuweni-${VERSION}.zip"
 
 cat > tuweni.rb <<EOF
 class Tuweni < Formula
-  desc "apache tuweni ethereum client"
+  desc "Apache Tuweni Ethereum client"
   homepage "https://github.com/apache/incubator-tuweni"
   url "${URL}"
   # update with: ./updateTuweni.sh <new-version>
@@ -31,7 +34,7 @@ class Tuweni < Formula
   def install
     prefix.install "lib"
     bin.install "bin/tuweni"
-    # bin.install "bin/jsonrpc"
+    bin.install "bin/jsonrpc"
     bin.install "bin/eth-faucet"
   end
 
