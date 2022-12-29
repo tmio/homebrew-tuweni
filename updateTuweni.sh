@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-TEMP=`mktemp -d`
+TEMP=$(mktemp -d)
 
 function cleanup() 
 {
-	rm -rf "${TEMP}"
+ rm -rf "${TEMP}"
 }
 
 trap cleanup EXIT
@@ -17,13 +17,13 @@ echo "Downloading version ${VERSION} of tuweni from ${URL}..."
 curl -o "${TEMP}/tuweni-${VERSION}.zip" -sL "${URL}"
 
 echo "Calculating new hash..."
-HASH=`shasum -a 256 ${TEMP}/tuweni-${VERSION}.zip | cut -d ' ' -f 1`
+HASH=$(shasum -a 256 "${TEMP}"/tuweni-"${VERSION}".zip | cut -d ' ' -f 1)
 
 unzip -t  "${TEMP}/tuweni-${VERSION}.zip"
 
 cat > tuweni.rb <<EOF
 class Tuweni < Formula
-  desc "apache tuweni ethereum client"
+  desc "Apache Tuweni Ethereum client"
   homepage "https://github.com/apache/incubator-tuweni"
   url "${URL}"
   # update with: ./updateTuweni.sh <new-version>
@@ -34,7 +34,7 @@ class Tuweni < Formula
   def install
     prefix.install "lib"
     bin.install "bin/tuweni"
-    # bin.install "bin/jsonrpc"
+    bin.install "bin/jsonrpc"
     bin.install "bin/eth-faucet"
   end
 
